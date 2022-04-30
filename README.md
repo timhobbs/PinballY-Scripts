@@ -22,8 +22,25 @@ Then, simply double click the batch file and all the videos will be re-oriented 
 ### Getting it working
 
 1. Add the script to your `main.js`
-    ````
+    ```
     import 'launchAnimations.js';
-    ````
+    ```
 2. Edit the `launchAnimations.js` file to set the values as you like. At a minimum you will want to change the default video name if you want a default loading animation to play.
+    ```
+    // START - Edit these values
+    // ------------------------------------------
+
+    // The name of the default launch animation
+    // This should be in you `Videos` folder
+    const defaultLaunchFileName = 'homeplayfieldsamplevideos';
+
+    // Whethar or not to disable the wheel image when thew animation plays
+    const disableWheel = true;
+
+    // Whethar or not to disable the messaging when thew animation plays
+    const disableMessaging = true;
+
+    // ------------------------------------------
+    // END - Edit these values
+    ```
 3. Run PinballY
