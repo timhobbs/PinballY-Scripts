@@ -3,6 +3,8 @@
 ## What scripts?
 
 - `launchAnimations`: adds custom media for loading animations
+- `launchLoadingVideo`: displays a single loading animation file for all tables
+- `randomLoadingAnimations`: displays a random file from `Videos` for loading animation
 
 ## How do I set it up?
 
