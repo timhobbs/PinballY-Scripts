@@ -1,6 +1,8 @@
 // START - Edit these values
 // ------------------------------------------
 
+// PREP: Place any number of loading videos in you `Videos` folder
+
 // Whether or not to disable the wheel image when thew animation plays
 const disableWheel = true;
 
