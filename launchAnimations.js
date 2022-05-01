@@ -2,13 +2,17 @@
 // ------------------------------------------
 
 // The name of the default launch animation
-// This should be in you `Videos` folder
-const defaultLaunchFileName = 'homeplayfieldsamplevideos';
+// This should be in your `Videos` folder
+const defaultLaunchFileName = '[YOUR_FILE_NAME_HERE]';
 
-// Whethar or not to disable the wheel image when thew animation plays
+// Use a random video
+// If this is `true` then the defaul file above is ignored
+const useRandomVideo = true
+
+// Whether or not to disable the wheel image when thew animation plays
 const disableWheel = true;
 
-// Whethar or not to disable the messaging when thew animation plays
+// Whether or not to disable the messaging when thew animation plays
 const disableMessaging = true;
 
 // ------------------------------------------
@@ -55,7 +59,7 @@ mainWindow.on("launchoverlayshow", (ev) => {
     let animation = gameInfo.resolveMedia('animation', true)[0];
     if (!animation) {
         // If we did not have an animation then use the default
-        animation = gameList.resolveMedia('Videos', defaultLaunchFileName, 'video');
+        animation = getVideo();
     }
 
     // If we STILL don't have an animation do not proceed
@@ -87,3 +91,26 @@ mainWindow.on("launchoverlaymessage", (ev) => {
     // Set messages
     ev.message = disableMessaging ? '' : ev.message;
 });
+
+function getVideo() {
+    if (!useRandomVideo) {
+        return gameList.resolveMedia('Videos', defaultLaunchFileName, 'video');
+    }
+
+    return getRandomVideo();
+}
+
+function getRandomVideo() {
+    const fso = createAutomationObject("Scripting.FileSystemObject");
+    const files = fso.GetFolder(fso.GetAbsolutePathName('../Media/Videos')).Files;
+    const videoFiles = [];
+    for (let file of files) {
+        videoFiles.push(file.Name);
+    }
+
+    return gameList.resolveMedia('Videos', videoFiles[getRandomInt(files.Count)]);
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
