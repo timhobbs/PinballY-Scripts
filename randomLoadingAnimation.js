@@ -2,6 +2,7 @@
 // ------------------------------------------
 
 // PREP: Place any number of loading videos in you `Videos` folder
+// https://www.videezy.com/free-video/abstract-loop - check here for videos
 
 // Whether or not to disable the wheel image when thew animation plays
 const disableWheel = true;
