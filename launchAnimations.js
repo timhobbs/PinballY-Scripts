@@ -15,8 +15,12 @@ const disableWheel = true;
 // Whether or not to disable the messaging when thew animation plays
 const disableMessaging = true;
 
+const debug = false;
+
 // ------------------------------------------
 // END - Edit these values
+
+const console = logfile;
 
 // Create the animation custom media type
 gameList.createMediaType({
@@ -33,20 +37,34 @@ gameList.createMediaType({
 });
 
 // DEBUG: Outputs list of tables and the animations for the table
-const allGames = gameList.getAllGames();
-allGames
-    .filter(game => game.isConfigured)
-    .forEach(game => {
-        console.log(
-            `displayName: ${game.displayName}\n` +
-            `animation:`
-        );
+if (debug) {
+    const allGames = gameList.getAllGames();
+    allGames
+        .filter(game => game.isConfigured)
+        .forEach(game => {
+            console.log(
+                `displayName: ${game.displayName}\n` +
+                `animation:`
+            );
 
-        const animation = game.resolveMedia('animation', true);
-        animation.forEach(a => console.log(`\t${a}`));
-    });
+            const animation = game.resolveMedia('animation', true);
+            animation.forEach(a => console.log(`\t${a}`));
+        });
+}
+
+// Listen for command so we can skip loading animations when capturing media
+let currentCommand;
+mainWindow.on('command', ev => {
+    currentCommand = ev.name;
+    console.log(`***** currentCommand: ${currentCommand}`);
+});
 
 mainWindow.on("launchoverlayshow", (ev) => {
+    // Skip if we are capturing media
+    if (currentCommand.startsWith('Capture') || currentCommand.startsWith('Batch')) {
+        return;
+    }
+
     // Get the current game info
     const gameInfo = ev.game;
 
@@ -59,7 +77,7 @@ mainWindow.on("launchoverlayshow", (ev) => {
     let animation = gameInfo.resolveMedia('animation', true)[0];
     if (!animation) {
         // If we did not have an animation then use the default
-        animation = getVideo();
+        animation = getVideo(gameInfo.system);
     }
 
     // If we STILL don't have an animation do not proceed
@@ -75,6 +93,10 @@ mainWindow.on("launchoverlayshow", (ev) => {
 });
 
 mainWindow.on("gamestarted", (ev) => {
+    // TODO: try to listen for the table window to know when to stop the loading animation
+    // const processes = getRunningProcesses();
+    // processes.forEach(p => console.log(`*****: ${p}`));
+
     // Clear the overlay when the game starts
     mainWindow.launchOverlay.bg.clear(0xff000000);
 });
@@ -92,7 +114,17 @@ mainWindow.on("launchoverlaymessage", (ev) => {
     ev.message = disableMessaging ? '' : ev.message;
 });
 
-function getVideo() {
+function getDefaultVideo(system) {
+    console.log(`***** system.displayName: ${system.displayName}`);
+    return gameList.resolveMedia('Videos', system.displayName, 'video');
+}
+
+function getVideo(system) {
+    const defaultVideo = getDefaultVideo(system);
+    if (defaultVideo) {
+        return defaultVideo;
+    }
+
     if (!useRandomVideo) {
         return gameList.resolveMedia('Videos', defaultLaunchFileName, 'video');
     }
@@ -100,17 +132,33 @@ function getVideo() {
     return getRandomVideo();
 }
 
+const videoFiles = [];
 function getRandomVideo() {
-    const fso = createAutomationObject("Scripting.FileSystemObject");
-    const files = fso.GetFolder(fso.GetAbsolutePathName('../Media/Videos')).Files;
-    const videoFiles = [];
-    for (let file of files) {
-        videoFiles.push(file.Name);
+    // Get all the files in the folder
+    if (!videoFiles.length) {
+        const fso = createAutomationObject("Scripting.FileSystemObject");
+        const files = fso.GetFolder(fso.GetAbsolutePathName('../Media/Videos')).Files;
+        for (let file of files) {
+            videoFiles.push(file.Name);
+        }
     }
 
-    return gameList.resolveMedia('Videos', videoFiles[getRandomInt(files.Count)]);
+    return gameList.resolveMedia('Videos', videoFiles[getRandomInt(videoFiles.length)]);
 }
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
+}
+
+function getRunningProcesses() {
+    const processes = [];
+    const locator = createAutomationObject("WbemScripting.SWbemLocator");
+    const service = locator.ConnectServer(".", "root\cimv2");
+    service.Security_.ImpersonationLevel = 3
+    const processCollection = service.ExecQuery("SELECT * FROM Win32_Process");
+    for (let process of processCollection) {
+        processes.push(process.Name)
+    }
+
+    return processes;
 }
