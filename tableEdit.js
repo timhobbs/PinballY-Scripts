@@ -5,10 +5,16 @@
 // Be sure to edit the folder location in `table-edit.bat` as well
 const batchFile = "c:\\Games\\PinballY\\Scripts\\table-edit.bat";
 
+// Uncomment the second line if you want to enable logging output
+let console = { log: () => {} };
+// console = logfile;
+
+// Change this to whatever font family you use
+const popupFont = 'Komika Title';
+
 // ------------------------------------------
 // END - Edit these values
 
-const console = logfile;
 const cameraEdit = command.allocate("CameraEdit");
 let overlay;
 
@@ -29,7 +35,6 @@ mainWindow.on("menuopen", ev => { // when main menu is triggered
 });
 
 mainWindow.on("command", ev => {
-    console.log('***** tableEdit command: ' + ev.name);
     if (ev.id == cameraEdit) {  // if its triggered
         const gameInfo = getGameInfo();
         const filename = '"' + gameInfo.resolveGameFile().filename + '"';
@@ -55,9 +60,31 @@ mainWindow.on("command", ev => {
             mainWindow.doCommand(command.MuteTableAudio);
 
             // Show message
-            mainWindow.message('The camera edit mode will open shortly. ' +
-                'Set the camera values appropriately and press "Start" to save or the escape key to exit. ' +
-                'Once you have completed the camera mode you may need to press the escape key again.', "info");
+            mainWindow.showPopup({
+                backgroundColor: 0x404040,
+                borderColor: 0xffffff,
+                borderWidth: 5,
+                y: 25,
+                draw: dc => {
+                    const s = new StyledText({ padding: 30 });
+                    s.add({
+                        font: popupFont,
+                        size: 35,
+                        text: 'The camera edit mode will open shortly. ' +
+                            'Set the camera values appropriately and press "Start" to save or "Exit" to quit. ' +
+                            'Once you have completed the camera mode you may need to press "Start"/"Exit" again.',
+                        color: 0xffffff,
+                        textAlign: 'justified',
+                    });
+
+                    const metrics = s.measure(1080 * 0.8);
+                    console.log('***** metrics: ' + metrics.width + ' x ' + metrics.height);
+
+                    s.draw(dc, { x: 0, y: 0, width: metrics.width, height: metrics.height });
+
+                    return metrics.height;
+                },
+            });
         } else {
             // launch failed
             mainWindow.message(`Program launch failed (code ${result.toNumber()})`, "error");
@@ -84,8 +111,9 @@ mainWindow.on("command", ev => {
 });
 
 mainWindow.on("keydown", ev => {
-    console.log('***** keydown: ' + ev.key);
-    if (ev.key === 'Escape' && overlay) {
+    console.log('***** keydown: ' + ev.key + ' - overlay: ' + overlay);
+    // React to escape or "Start" button (mapped to "1")
+    if (['Escape', '1'].includes(ev.key) && overlay) {
         // Remove overlay
         console.log('***** Removing overlay based on keydown: ' + ev.key);
         overlay.clear(0x00000000);
@@ -97,6 +125,9 @@ mainWindow.on("keydown", ev => {
 
         // Unmute table audio
         mainWindow.doCommand(command.MuteTableAudio);
+
+        // Press button to dismiss dialog
+        mainWindow.doButtonCommand('Select', true, 0);
 
         // Prevent normal key event from proceeding
         ev.preventDefault();
