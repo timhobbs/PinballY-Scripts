@@ -6,21 +6,30 @@
 const defaultLaunchFileName = '[YOUR_FILE_NAME_HERE]';
 
 // Use a random video
-// If this is `true` then the defaul file above is ignored
+// If this is `true` then the default file above is ignored
 const useRandomVideo = true
 
-// Whether or not to disable the wheel image when thew animation plays
+// Whether or not to disable the wheel image when the animation plays
 const disableWheel = true;
 
-// Whether or not to disable the messaging when thew animation plays
+// Whether or not to disable the messaging when the animation plays
 const disableMessaging = true;
 
+// Uncomment the second line if you want to enable logging output
+let console = { log: () => {} };
+// console = logfile;
+
+// Check to `true` if you want to output table animation details to the log
 const debug = false;
 
 // ------------------------------------------
 // END - Edit these values
 
-const console = logfile;
+// Note: The video play order is as follows:
+//  Game specific
+//  System
+//  Default (if random = false)
+//  Random
 
 // Create the animation custom media type
 gameList.createMediaType({
@@ -56,7 +65,6 @@ if (debug) {
 let currentCommand;
 mainWindow.on('command', ev => {
     currentCommand = ev.name;
-    console.log(`***** currentCommand: ${currentCommand}`);
 });
 
 mainWindow.on("launchoverlayshow", (ev) => {
@@ -93,7 +101,6 @@ mainWindow.on("launchoverlayshow", (ev) => {
 });
 
 mainWindow.on("gamestarted", (ev) => {
-    // TODO: try to listen for the table window to know when to stop the loading animation
     // const processes = getRunningProcesses();
     // processes.forEach(p => console.log(`*****: ${p}`));
 
@@ -114,18 +121,19 @@ mainWindow.on("launchoverlaymessage", (ev) => {
     ev.message = disableMessaging ? '' : ev.message;
 });
 
-function getDefaultVideo(system) {
-    console.log(`***** system.displayName: ${system.displayName}`);
+function getSystemVideo(system) {
+    console.log(`***** game-specific video: ${system.displayName}`);
     return gameList.resolveMedia('Videos', system.displayName, 'video');
 }
 
 function getVideo(system) {
-    const defaultVideo = getDefaultVideo(system);
-    if (defaultVideo) {
-        return defaultVideo;
+    const systemVideo = getSystemVideo(system);
+    if (systemVideo) {
+        return systemVideo;
     }
 
     if (!useRandomVideo) {
+        console.log(`***** default video: ${defaultLaunchFileName}`);
         return gameList.resolveMedia('Videos', defaultLaunchFileName, 'video');
     }
 
@@ -143,7 +151,9 @@ function getRandomVideo() {
         }
     }
 
-    return gameList.resolveMedia('Videos', videoFiles[getRandomInt(videoFiles.length)]);
+    const randomVideoFile = videoFiles[getRandomInt(videoFiles.length)];
+    console.log(`***** random video: ${randomVideoFile}`);
+    return gameList.resolveMedia('Videos', randomVideoFile);
 }
 
 function getRandomInt(max) {
