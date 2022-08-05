@@ -34,15 +34,36 @@ Then, simply double click the batch file and all the videos will be re-oriented 
 
     // The name of the default launch animation
     // This should be in you `Videos` folder
-    const defaultLaunchFileName = 'homeplayfieldsamplevideos';
+    const defaultLaunchFileName = 'playfield.mp4';
 
-    // Whethar or not to disable the wheel image when thew animation plays
+    // Use a random video
+    // If this is `true` then the default file above is ignored
+    const useRandomVideo = true
+
+    // Whether or not to disable the wheel image when the animation plays
     const disableWheel = true;
 
-    // Whethar or not to disable the messaging when thew animation plays
+    // Whether or not to disable the messaging when the animation plays
     const disableMessaging = true;
 
     // ------------------------------------------
     // END - Edit these values
     ```
 3. Run PinballY
+
+## Additonal Menu Items
+
+![pby-edit-menu](./images/pby-edit-menu.png)
+
+- `tableEdit.js`: will add a menu item to allow you to enter camera edit mode in VPX
+- `forceCapture.js`: bypasses the normal media capture flow to use the same previous settings for the current capture (e.g., if you have selected to capture the table image and dmd image, then those will be the settings used for the force capture)
+
+### Table Edit
+
+You will want to alter the script to point to the location of your `table-edit.bat` file (included in the repo). You will also want to edit the batch file to point to your VPX install location.
+
+## Media Processing
+
+I have included a batch files to process media:
+
+- `to-mp4.bat`: converts `.mov` files to `.mp4`
