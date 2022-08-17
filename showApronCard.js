@@ -1,5 +1,6 @@
 // Copy pasta from Apron "Score Card" window
 // http://mjrnet.org/pinscape/downloads/PinballY/Help/CustomMediaWindowExample.html
+// Now with some improvement and enhancements! :)
 
 // START - Edit these values
 // ------------------------------------------

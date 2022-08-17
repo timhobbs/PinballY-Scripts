@@ -5,6 +5,8 @@
 - `launchAnimations`: adds custom media for loading animations
 - `launchLoadingVideo`: displays a single loading animation file for all tables
 - `randomLoadingAnimations`: displays a random file from `Videos` for loading animation
+- `showApronCard`: adds a new apron card screen that displays high scores for tables
+- `toggleDmdWindow`: toggles the DMD window off when a table is started
 
 ## How do I set it up?
 
@@ -50,6 +52,28 @@ Then, simply double click the batch file and all the videos will be re-oriented 
     // END - Edit these values
     ```
 3. Run PinballY
+
+## Additional Scripts
+
+### Show Apron Card
+
+Originally a copy/paste of the suggestion in the help docs, this morphed a bit to show parsed score information and cycle thru the scores when there are multiple score "groups". It was also modified to allow for some simple customizations for those that are not JS savvy or are not comfortable editing scripts.
+
+#### Examples
+
+**Multiple Groups**
+
+![avg-1.png](./images/avg-1.png)
+
+![avg-2.png](./images/avg-2.png)
+
+**No High Score Info**
+
+![bgs-1.png](./images/bgs-1.png)
+
+### Toggle DMD Window
+
+I was haviing some weird behavior with my FUllDMD and any PuP packs where the PBY DMD would display a black screen over the top of the PuP pack making it so the PuP animation/image would not show. This was a quick script I created to toggle the PBY DMD off when a game starts and toggle it back on when the game ends.
 
 ## Additonal Menu Items
 
