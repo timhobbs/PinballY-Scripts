@@ -6,7 +6,8 @@
 // all of the graphics will be custom drawn in Javascript.
 let scoreCardWin = mainWindow.createMediaWindow({
     title: "Score Card",
-    configVarPrefix: "custom.ScoreCard"
+    configVarPrefix: "custom.ScoreCard",
+    backgroundImageMediaType: "bg image",
 });
 
 // Create a drawing layer for our generated score card image
@@ -34,7 +35,7 @@ scoreCardWin.on("mediasyncload", ev => {
               text-align: center;
               font: normal 16pt 'Komika Title';
               padding: 16px;
-              color: black;
+              color: white;
             }
             #outer div {
               padding: 1em;
@@ -91,7 +92,7 @@ scoreCardWin.on("mediasyncload", ev => {
             // for the background fill, you can replace this with
             // a call to drawImage().
             let sz = dc.getSize();
-            dc.fillRect(0, 0, sz.width, sz.height, 0xffffffff);
+            dc.fillRect(0, 0, sz.width, sz.height, 0xE8000000);
 
             // draw the HTML layout
             layout.draw(dc, layoutRect);
