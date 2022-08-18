@@ -20,7 +20,7 @@ let overlay;
 
 // Add edit menu item and trigger vpx edit mode
 mainWindow.on("menuopen", ev => { // when main menu is triggered
-    if (ev.id == "main") {
+    if (ev.id === "main") {
         const gameInfo = getGameInfo();
         const systemClass = gameInfo && gameInfo.system ? gameInfo.system.systemClass : '';
         if (systemClass !== 'VPX') {
@@ -35,7 +35,7 @@ mainWindow.on("menuopen", ev => { // when main menu is triggered
 });
 
 mainWindow.on("command", ev => {
-    if (ev.id == cameraEdit) {  // if its triggered
+    if (ev.id === cameraEdit) {  // if its triggered
         const gameInfo = getGameInfo();
         const filename = '"' + gameInfo.resolveGameFile().filename + '"';
         console.log('***** command: ' + ev.name + ' - ' + filename);
@@ -85,6 +85,9 @@ mainWindow.on("command", ev => {
                     return metrics.height;
                 },
             });
+
+            // Toggle windows
+            toggleWindows(false);
         } else {
             // launch failed
             mainWindow.message(`Program launch failed (code ${result.toNumber()})`, "error");
@@ -107,6 +110,9 @@ mainWindow.on("command", ev => {
 
         // Unmute table audio
         mainWindow.doCommand(command.MuteTableAudio);
+
+        // Toggle windows
+        toggleWindows(true);
     }
 });
 
@@ -129,6 +135,9 @@ mainWindow.on("keydown", ev => {
         // Press button to dismiss dialog
         mainWindow.doButtonCommand('Select', true, 0);
 
+        // Toggle windows
+        toggleWindows(true);
+
         // Prevent normal key event from proceeding
         ev.preventDefault();
     }
@@ -136,6 +145,13 @@ mainWindow.on("keydown", ev => {
 
 function getGameInfo() {
     return gameList.getWheelGame(0);
+}
+
+// Since the camera edit mode is sort of "outside" the normal PBY behavior the PBY screens stick around
+// We need to explicitly toggle the state - off when entering camera edit then back on when complete
+function toggleWindows(state) {
+    dmdWindow.showWindow(state);
+    topperWindow.showWindow(state);
 }
 
 let Shell32 = dllImport.bind("Shell32.dll", `
