@@ -68,7 +68,7 @@ scoreCardWin.on("mediasyncload", ev => {
         }
 
         if (!Array.isArray(scores)) {
-            // IF we don't have groups just show the scores
+            // If we don't have groups just show the scores
             drawScorecardLayer(title, headline, scores);
         } else {
             // Start by showing the first group immediately
@@ -137,11 +137,10 @@ scoreCardWin.on("mediasyncload", ev => {
 
         // If the height is greater than our default 480 pixels,
         // make the window proportionally larger.
-        if (layoutSize.height > windowSize.height)
-        {
-        windowSize.width *= layoutSize.height/windowSize.height;
-        windowSize.height = layoutSize.height;
-        layoutRect.height = layoutSize.height;
+        if (layoutSize.height > windowSize.height) {
+            windowSize.width *= layoutSize.height/windowSize.height;
+            windowSize.height = layoutSize.height;
+            layoutRect.height = layoutSize.height;
         }
 
         // Center the layout in the window
@@ -151,10 +150,7 @@ scoreCardWin.on("mediasyncload", ev => {
         // draw the window
         scoreCardLayer.draw(dc => {
 
-        // Fill the background with solid opaque white.  If you
-        // prefer to use custom graphics from a PNG or JPEG file
-        // for the background fill, you can replace this with
-        // a call to drawImage().
+        // Fill the background.
         let sz = dc.getSize();
         dc.fillRect(0, 0, sz.width, sz.height, cardBgColor);
 
