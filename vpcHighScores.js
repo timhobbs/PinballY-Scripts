@@ -182,14 +182,16 @@ vpcCardWin.on("mediasyncload", ev => {
     // and the score text.  We'll invoke this when a newly
     // selected game's high scores are retrieved.
     function drawScoreCard(title, headline, scores) {
-        console.log('***** scores', scores.length);
 
         // Show error/info message
         if (!Array.isArray(scores)) {
             drawScorecardLayer(title, headline, scoresToString(scores));
+            console.log('***** scores', scores);
 
             return;
         }
+
+        console.log('***** scores', scores.length);
 
         // Get max amount of scores
         if (maxScores !== -1) {
