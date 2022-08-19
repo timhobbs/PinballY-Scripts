@@ -25,6 +25,10 @@ const maxScores = -1;
 
 // Max number of scores to show on a card
 const maxScoresPerCard = 5;
+
+// Change to suit - try to keep to a common ratio (4:3, 16:9) or else it may look weird
+const cardWidth = 800;
+const cardHeight = 600;
 // ------------------------------------------
 // END - Edit these values
 
@@ -34,11 +38,13 @@ function fetchData(game) {
     return new Promise((resolve, reject) => {
         const scores = [];
         const gameData = getGameData(game);
+        let msg;
 
         if (!gameData.vpsid) {
-            console.log(`***** No VPSID for ${gameData.description}`);
+            msg = 'No VPSID';
+            console.log(`***** ${msg} for ${gameData.description}`);
 
-            return resolve(scores);
+            return resolve(msg);
         }
 
         const req = new HttpRequest();
@@ -47,8 +53,6 @@ function fetchData(game) {
         req.setRequestHeader('Content-Type', 'application/json');
         req.send().then(tables => {
             tables = JSON.parse(tables);
-
-            let msg;
 
             console.log(`***** VPC High Scores for ${gameData.description} (${gameData.vpsid})`);
 
@@ -64,7 +68,7 @@ function fetchData(game) {
                 msg = 'No High Scores posted';
                 console.log(`***** ${msg}`);
 
-                return resolve(scores);
+                return resolve(msg);
             }
 
             try {
@@ -79,7 +83,7 @@ function fetchData(game) {
                         (i + 1).toString()
                     }) ${
                         score.user.username.slice(0, 20)
-                    } ${
+                    }     ${
                         score.score.toLocaleString()
                     } (v${
                         score.versionNumber
@@ -101,18 +105,19 @@ function fetchData(game) {
 }
 
 const db = {};
-function getGameData(game) {
-    console.log('***** filename:', game.filename);
-    console.log('***** dbFile:', game.dbFile);
+function getGameData(gameInfo) {
+    console.log('***** filename:', gameInfo.filename);
+    console.log('***** dbFile:', gameInfo.dbFile);
 
-    const gameData = db[game.filename];
+    const gameData = db[gameInfo.filename];
     if (gameData) {
+        console.log('***** Game fetched from cache:', gameInfo.displayName);
         return gameData;
     }
 
     // Open and read db xml file
     const fso = createAutomationObject("Scripting.FileSystemObject");
-    const file = fso.OpenTextFile(game.dbFile, 1);
+    const file = fso.OpenTextFile(gameInfo.dbFile, 1);
     const contents = file.ReadAll();
 
     // Parse xml
@@ -120,7 +125,7 @@ function getGameData(game) {
     doc.loadXML(contents);
 
     // Select the node for the current game and get child nodes
-    const node = doc.selectSingleNode('menu/game[@name="' + game.filename + '"]');
+    const node = doc.selectSingleNode('menu/game[@name="' + gameInfo.filename + '"]');
     const children = node.childNodes;
 
     // Add child nodes to object
@@ -131,13 +136,13 @@ function getGameData(game) {
     }
 
     // Add game details to in-memory db store (so we don't have to read the file repeatedly)
-    db[game.filename] = gameObj;
+    db[gameInfo.filename] = gameObj;
 
     // Close the file
     file.Close();
 
     // Return the game details
-    return db[game.filename];
+    return db[gameInfo.filename];
 }
 
 let Shell32 = dllImport.bind("Shell32.dll", `
@@ -249,7 +254,7 @@ vpcCardWin.on("mediasyncload", ev => {
         // characters to "&" equivalents, and then joining them
         // all together with line break (BR) tags
         return scores.map(
-            s => s.replace(/</g, "&lt;").replace(/&/g, "&")).join("<BR>");
+            s => s.replace(/</g, "&lt;").replace(/\s/g, "&nbsp;").replace(/&/g, "&")).join("<BR>");
     }
 
     function drawScorecardLayer(title, headline, scores) {
@@ -279,16 +284,16 @@ vpcCardWin.on("mediasyncload", ev => {
         <div id="footer">FOR AMUSEMENT ONLY</div>
         </div>`);
 
-        // By default, we'll display the graphics in a 640x480
+        // By default, we'll display the graphics in a 800x600
         // canvas.  But if the layout is too tall for that, we'll
         // expand the window vertically to make room.  We'll keep
         // the aspect ratio of the window the same so that the
         // geometry isn't distorted, and we'll still fit the
-        // layout to the same 640-pixel width within the larger
+        // layout to the same 800-pixel width within the larger
         // window, so that it maintains the same dimensions in
         // the final display.  So start by figuring the height
-        // needed for the layout at 640 pixels wide.
-        let windowSize = { width: 640, height: 480 };
+        // needed for the layout at 800 pixels wide.
+        let windowSize = { width: cardWidth, height: cardHeight };
         let layoutRect = {
         x: 0,
         y: 0,
@@ -297,7 +302,7 @@ vpcCardWin.on("mediasyncload", ev => {
         };
         let layoutSize = layout.measure(windowSize.width);
 
-        // If the height is greater than our default 480 pixels,
+        // If the height is greater than our default 600 pixels,
         // make the window proportionally larger.
         if (layoutSize.height > windowSize.height) {
             windowSize.width *= layoutSize.height/windowSize.height;
@@ -328,7 +333,7 @@ vpcCardWin.on("mediasyncload", ev => {
     if (ev.game) {
         console.log('***** ev.game fetch data:', ev.game.displayName)
         fetchData(ev.game).then(scores => {
-            if (!Array.isArray(scores)) {
+            if (Array.isArray(scores) && !scores.length) {
                 scores = 'No scores available';
             }
 
