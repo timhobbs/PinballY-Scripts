@@ -199,6 +199,7 @@ vpcCardWin.on("mediasyncload", ev => {
             console.log(`***** scores trimmed to maxScores length:`, scores.length);
         }
 
+        // Show a single card
         if (scores.length <= maxScoresPerCard) {
             drawScorecardLayer(title, headline, scoresToString(scores));
             console.log(`***** drawing single scores card:`, scores.length);
@@ -206,38 +207,26 @@ vpcCardWin.on("mediasyncload", ev => {
             return;
         }
 
+        // Split the scores into multiple cards
         const scoreSplit = Math.floor(scores.length / maxScoresPerCard);
-
         console.log(`***** scores split:`, scoreSplit);
 
         const tempScores = [];
         for (let i = 0; i < scoreSplit; i++) {
             const scoresSlice = scores.slice(i * maxScoresPerCard, i * maxScoresPerCard + maxScoresPerCard);
-
             console.log(`***** scores slice:`, JSON.stringify(scoresSlice));
-
             tempScores.push(scoresSlice);
         }
 
-        const scoresRemaining = scores.slice(scoreSplit * maxScoresPerCard);
-
-        console.log(`***** scores remaining:`, JSON.stringify(scoresRemaining));
-
-        tempScores.push(scoresRemaining);
+        // If we have remaining scores, add them
+        if (scores.length % scoreSplit * maxScoresPerCard > 0) {
+            const scoresRemaining = scores.slice(scoreSplit * maxScoresPerCard);
+            console.log(`***** scores remaining:`, JSON.stringify(scoresRemaining));
+            tempScores.push(scoresRemaining);
+        }
 
         scores = tempScores;
-
         console.log(`***** scores reset:`, scores.length);
-
-        // // translate the scores to HTML, changing special markup
-        // // characters to "&" equivalents, and then joining them
-        // // all together with line break (BR) tags
-        // scores = (scores || []).map(
-        //     s => s.replace(/</g, "&lt;").replace(/&/g, "&")).join("<BR>");
-
-        // if (scores.includes('<BR><BR>')) {
-        //     scores = scores.split('<BR><BR>');
-        // }
 
         // Start by showing the first group immediately
         drawScorecardLayer(title, headline, scoresToString(scores[0]));
