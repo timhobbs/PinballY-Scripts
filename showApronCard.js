@@ -177,8 +177,7 @@ scoreCardWin.on("mediasyncload", ev => {
                     "FREE PLAY - PRESS START");
             }
         );
-    }
-    else {
+    } else {
         // no game is selected; draw a generic placeholder
         drawScoreCard("PinballY", "Please select a game using the menus");
     }
