@@ -44,6 +44,9 @@ function getGameData(game) {
 
     console.log('***** gameObj:', JSON.stringify(gameObj));
 
+    // Close the file
+    file.Close();
+
     // Return the game details
     return db[game.filename];
 }
