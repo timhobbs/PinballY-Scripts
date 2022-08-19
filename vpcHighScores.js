@@ -199,7 +199,7 @@ vpcCardWin.on("mediasyncload", ev => {
             console.log(`***** scores trimmed to maxScores length:`, scores.length);
         }
 
-        if (scores.length < maxScoresPerCard) {
+        if (scores.length <= maxScoresPerCard) {
             drawScorecardLayer(title, headline, scoresToString(scores));
             console.log(`***** drawing single scores card:`, scores.length);
 
