@@ -7,6 +7,7 @@
 - `randomLoadingAnimations`: displays a random file from `Videos` for loading animation
 - `showApronCard`: adds a new apron card screen that displays high scores for tables
 - `toggleDmdWindow`: toggles the DMD window off when a table is started
+- `vpcHighScores`: adds a new VPC "High Score Corner" screen
 
 ## How do I set it up?
 
@@ -74,6 +75,47 @@ Originally a copy/paste of the suggestion in the help docs, this morphed a bit t
 ### Toggle DMD Window
 
 I was haviing some weird behavior with my FUllDMD and any PuP packs where the PBY DMD would display a black screen over the top of the PuP pack making it so the PuP animation/image would not show. This was a quick script I created to toggle the PBY DMD off when a game starts and toggle it back on when the game ends.
+
+### VPC "High Score Corner"
+
+Apophis issued me a friendly challenge in the VPC #pinbally channel - could I integrate scores from the VPC #high-score-corner channel? He gave me some direction by linking a [github repo](https://github.com/ericfaris/vpc-get-high-scores-image#readme) maintained by Eric Faris that integrated the scores with Popper. The repo gave me everything I needed to figure out how to get the high score info.
+
+I had recently worked on implementing an additional apron card so things were fresh. I used that knowledge to determine that I could make an API call on-the-fly to get the scores data and dynamically create the high score card. This is a bit different than what Eric did for Popper but I think it is a good way to go about it. I store the scores in memory so to not hammer the API endpoint, so it is the equivalent of getting all the scores up front - and I don't get ALL the scores, just the ones that are viewed on the PBY wheel, so it could potentially even save some API traffic.
+
+Anyway, the hard part of this all is the linking of the VPS data: PBY doesn't have an interface for adding additonal metadata to a table, but the data is in a simple XML "database" file, so it is easily editable. However, I am a software engineer by trade, so XML is like simple math, but I know for some people it is like algebra or calculus. I will try to make it easy to understand how to edit the XML file, but I am also working on a "companion app" for PBY that will read the XML file, give you a nioce web UI to edit information, save it, and finally export the data back out to the XML database. However, there is still some work to be done there, and there is a trade-off in complexity (installing a node web app vs. editing an XML file). And I learned the hard way working on the app that the db XML is not encoded in utf-8! :unamused:
+
+#### Editing the XML
+
+1. Open your `Visual Pinball X.xml` database file (located in the Databases\Visual Pinball X folder)
+2. Add a new `<vpsid>` element with the VPS ID value ([from the website](https://virtual-pinball-spreadsheet.web.app/))
+3. Save the file
+
+![xml.png](./images/xml.png)
+
+In the above example the Bubba table's VPS ID is `cGzy2IxA`, so I added the following element:
+```
+<vpsid>cGzy2IxA</vpsid>
+```
+
+It is really pretty simple once you get the hang of it. If you use a nice text editor like Sublime it can even help you out by auto-closing the element tags.
+
+Once you have added the VPS ID's for your tables, you will need to restart PBY. If you do this in batches, each time you want to see any XML database updates, it will require a resatrt of PBY.
+
+#### Where do I get the VPS ID?
+
+Check the README on Eric's [github repo](https://github.com/ericfaris/vpc-get-high-scores-image#readme) for some pretty pictures and helpful annotations to show you how to find the VPS ID on the [website](https://virtual-pinball-spreadsheet.web.app/)]. He also explains how you can export the data to a CSV, but I am not sure how helpful that is. I tried it this way and you will have to use the "Pinup Popper" export (the "Pinball X" export does _not_ include the VPS ID), but there is so much information it was not really any easier. I actually preferred the web UI to lookup the table and find the match VPS ID for my table.
+
+#### Card Examples
+
+![bub-1.png](./images/bub-1.png)
+
+![bub-2.png](./images/bub-2.png)
+
+![bub-3.png](./images/bub-3.png)
+
+![bub-4.png](./images/bub-4.png)
+
+![bub-5.png](./images/bub-5.png)
 
 ## Additonal Menu Items
 
