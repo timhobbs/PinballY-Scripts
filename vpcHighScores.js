@@ -185,7 +185,7 @@ vpcCardWin.on("mediasyncload", ev => {
 
         // Show error/info message
         if (!Array.isArray(scores)) {
-            drawScorecardLayer(title, headline, scoresToString(scores));
+            drawScorecardLayer(title, headline, scores);
             console.log('***** scores', scores);
 
             return;
