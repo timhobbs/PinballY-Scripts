@@ -184,6 +184,13 @@ vpcCardWin.on("mediasyncload", ev => {
     function drawScoreCard(title, headline, scores) {
         console.log('***** scores', scores.length);
 
+        // Show error/info message
+        if (!Array.isArray(scores)) {
+            drawScorecardLayer(title, headline, scoresToString(scores));
+
+            return;
+        }
+
         // Get max amount of scores
         if (maxScores !== -1) {
             scores = scores.slice(0, maxScores - 1);
