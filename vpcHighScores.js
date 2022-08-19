@@ -29,6 +29,9 @@ const maxScoresPerCard = 5;
 // Change to suit - try to keep to a common ratio (4:3, 16:9) or else it may look weird
 const cardWidth = 800;
 const cardHeight = 600;
+
+// Show error messages
+const showErrorMessage = true;
 // ------------------------------------------
 // END - Edit these values
 
@@ -331,6 +334,10 @@ vpcCardWin.on("mediasyncload", ev => {
     if (ev.game) {
         console.log('***** ev.game fetch data:', ev.game.displayName)
         fetchData(ev.game).then(scores => {
+            if (!Array.isArray(scores) && !showErrorMessage) {
+                scores = '';
+            }
+
             if (Array.isArray(scores) && !scores.length) {
                 scores = 'No scores available';
             }
