@@ -1,3 +1,5 @@
+import { console, toggleWindows } from 'helpers.js';
+
 let editState = false;
 
 mainWindow.on("command", ev => {
