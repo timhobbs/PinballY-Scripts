@@ -26,7 +26,6 @@ const cardBgColor = 0xBF000000;
 // ------------------------------------------
 // END - Edit these values
 
-const console = logfile;
 let interval;
 
 // Create the Score Card window.  This is an especially simple

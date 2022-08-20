@@ -1,3 +1,5 @@
+import { getRandomVideo } from "helpers.js";
+
 // START - Edit these values
 // ------------------------------------------
 
@@ -47,18 +49,3 @@ mainWindow.on("launchoverlaymessage", (ev) => {
     }
     ev.message = disableMessaging ? '' : ev.message;
 });
-
-function getRandomVideo() {
-    const fso = createAutomationObject("Scripting.FileSystemObject");
-    const files = fso.GetFolder(fso.GetAbsolutePathName('../Media/Videos')).Files;
-    const videoFiles = [];
-    for (let file of files) {
-        videoFiles.push(file.Name);
-    }
-
-    return gameList.resolveMedia('Videos', videoFiles[getRandomInt(files.Count)]);
-}
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-}

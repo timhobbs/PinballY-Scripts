@@ -1,3 +1,5 @@
+import { console } from "helpers.js";
+
 // START - Edit these values
 // ------------------------------------------
 // These alter the font sizes for the various card text
@@ -34,8 +36,6 @@ const cardHeight = 600;
 const showErrorMessage = true;
 // ------------------------------------------
 // END - Edit these values
-
-const console = logfile;
 
 function fetchData(game) {
     return new Promise((resolve, reject) => {
@@ -147,17 +147,6 @@ function getGameData(gameInfo) {
     // Return the game details
     return db[gameInfo.filename];
 }
-
-let Shell32 = dllImport.bind("Shell32.dll", `
-    HINSTANCE ShellExecuteW(
-        HWND    hwnd,
-        LPCWSTR lpOperation,
-        LPCWSTR lpFile,
-        LPCWSTR lpParameters,
-        LPCWSTR lpDirectory,
-        INT     nShowCmd
-    );
-`);
 
 // Create the Score Card window.  This is an especially simple
 // one, since it doesn't need to display any automatic media:

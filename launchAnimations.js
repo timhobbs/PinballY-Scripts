@@ -1,3 +1,5 @@
+import { console, getRandomVideo } from "helpers.js";
+
 // START - Edit these values
 // ------------------------------------------
 
@@ -14,10 +16,6 @@ const disableWheel = true;
 
 // Whether or not to disable the messaging when the animation plays
 const disableMessaging = true;
-
-// Uncomment the second line if you want to enable logging output
-let console = { log: () => {} };
-// console = logfile;
 
 // Check to `true` if you want to output table animation details to the log
 const debug = false;
@@ -65,6 +63,7 @@ if (debug) {
 let currentCommand;
 mainWindow.on('command', ev => {
     currentCommand = ev.name;
+    console.log(`***** launchAnimations command:`, currentCommand);
 });
 
 mainWindow.on("launchoverlayshow", (ev) => {
@@ -101,6 +100,7 @@ mainWindow.on("launchoverlayshow", (ev) => {
 });
 
 mainWindow.on("gamestarted", (ev) => {
+    console.log(`***** launchAnimations gamestarted`);
     // const processes = getRunningProcesses();
     // processes.forEach(p => console.log(`*****: ${p}`));
 
@@ -109,6 +109,8 @@ mainWindow.on("gamestarted", (ev) => {
 });
 
 mainWindow.on("launchoverlaymessage", (ev) => {
+    console.log(`***** launchAnimations launchoverlaymessage`);
+
     // Set wheel display
     ev.hideWheelImage = disableWheel;
 
@@ -122,7 +124,7 @@ mainWindow.on("launchoverlaymessage", (ev) => {
 });
 
 function getSystemVideo(system) {
-    console.log(`***** game-specific video: ${system.displayName}`);
+    console.log(`***** launchAnimations game-specific video: ${system.displayName}`);
     return gameList.resolveMedia('Videos', system.displayName, 'video');
 }
 
@@ -133,42 +135,9 @@ function getVideo(system) {
     }
 
     if (!useRandomVideo) {
-        console.log(`***** default video: ${defaultLaunchFileName}`);
+        console.log(`***** launchAnimations default video: ${defaultLaunchFileName}`);
         return gameList.resolveMedia('Videos', defaultLaunchFileName, 'video');
     }
 
     return getRandomVideo();
-}
-
-const videoFiles = [];
-function getRandomVideo() {
-    // Get all the files in the folder
-    if (!videoFiles.length) {
-        const fso = createAutomationObject("Scripting.FileSystemObject");
-        const files = fso.GetFolder(fso.GetAbsolutePathName('../Media/Videos')).Files;
-        for (let file of files) {
-            videoFiles.push(file.Name);
-        }
-    }
-
-    const randomVideoFile = videoFiles[getRandomInt(videoFiles.length)];
-    console.log(`***** random video: ${randomVideoFile}`);
-    return gameList.resolveMedia('Videos', randomVideoFile);
-}
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-}
-
-function getRunningProcesses() {
-    const processes = [];
-    const locator = createAutomationObject("WbemScripting.SWbemLocator");
-    const service = locator.ConnectServer(".", "root\cimv2");
-    service.Security_.ImpersonationLevel = 3
-    const processCollection = service.ExecQuery("SELECT * FROM Win32_Process");
-    for (let process of processCollection) {
-        processes.push(process.Name)
-    }
-
-    return processes;
 }

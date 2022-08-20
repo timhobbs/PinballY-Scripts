@@ -1,3 +1,5 @@
+import { Shell32, console, toggleWindows } from "helpers.js";
+
 // START - Edit these values
 // ------------------------------------------
 
@@ -5,9 +7,9 @@
 // Be sure to edit the folder location in `table-edit.bat` as well
 const batchFile = "c:\\Games\\PinballY\\Scripts\\table-edit.bat";
 
-// Uncomment the second line if you want to enable logging output
-let console = { log: () => {} };
-// console = logfile;
+// // Uncomment the second line if you want to enable logging output
+// let console = { log: () => {} };
+// // console = logfile;
 
 // Change this to whatever font family you use
 const popupFont = 'Komika Title';
@@ -146,21 +148,3 @@ mainWindow.on("keydown", ev => {
 function getGameInfo() {
     return gameList.getWheelGame(0);
 }
-
-// Since the camera edit mode is sort of "outside" the normal PBY behavior the PBY screens stick around
-// We need to explicitly toggle the state - off when entering camera edit then back on when complete
-function toggleWindows(state) {
-    dmdWindow.showWindow(state);
-    topperWindow.showWindow(state);
-}
-
-let Shell32 = dllImport.bind("Shell32.dll", `
-    HINSTANCE ShellExecuteW(
-        HWND    hwnd,
-        LPCWSTR lpOperation,
-        LPCWSTR lpFile,
-        LPCWSTR lpParameters,
-        LPCWSTR lpDirectory,
-        INT     nShowCmd
-    );
-`);
