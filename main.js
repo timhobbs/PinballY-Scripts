@@ -7,7 +7,7 @@ import 'vpcHighScores.js';
 import 'submitScore.js';
 import 'mediaCapture.js';
 
-import { console, toggleWindows } from 'helpers';
+import { console, toggleWindows } from 'helpers.js';
 
 // import 'randomLoadingAnimation.js';
 // import 'launchLoadingVideo.js';
