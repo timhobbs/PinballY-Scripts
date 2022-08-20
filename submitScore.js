@@ -1,4 +1,4 @@
-import { console } from "helpers.js";
+import { console } from 'helpers.js';
 
 const submitScore = command.allocate("SubmitScore");
 

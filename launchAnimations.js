@@ -1,27 +1,5 @@
-import { console, getRandomVideo } from "helpers.js";
-
-// START - Edit these values
-// ------------------------------------------
-
-// The name of the default launch animation
-// This should be in your `Videos` folder
-const defaultLaunchFileName = '[YOUR_FILE_NAME_HERE]';
-
-// Use a random video
-// If this is `true` then the default file above is ignored
-const useRandomVideo = true
-
-// Whether or not to disable the wheel image when the animation plays
-const disableWheel = true;
-
-// Whether or not to disable the messaging when the animation plays
-const disableMessaging = true;
-
-// Check to `true` if you want to output table animation details to the log
-const debug = false;
-
-// ------------------------------------------
-// END - Edit these values
+import { console, getRandomVideo } from 'helpers.js';
+import { debug, defaultLaunchFileName, disableMessaging, disableWheel, useRandomVideo } from 'env.js';
 
 // Note: The video play order is as follows:
 //  Game specific

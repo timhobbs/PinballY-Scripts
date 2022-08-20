@@ -1,4 +1,4 @@
-import { Shell32, console, toggleWindows } from "helpers.js";
+import { Shell32, console, toggleWindows } from 'helpers.js';
 
 // START - Edit these values
 // ------------------------------------------

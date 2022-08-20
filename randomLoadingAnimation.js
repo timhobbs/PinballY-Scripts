@@ -1,19 +1,6 @@
-import { getRandomVideo } from "helpers.js";
+import { disableMessaging, disableWheel } from 'env.js';
 
-// START - Edit these values
-// ------------------------------------------
-
-// PREP: Place any number of loading videos in you `Videos` folder
-// https://www.videezy.com/free-video/abstract-loop - check here for videos
-
-// Whether or not to disable the wheel image when thew animation plays
-const disableWheel = true;
-
-// Whether or not to disable the messaging when thew animation plays
-const disableMessaging = true;
-
-// ------------------------------------------
-// END - Edit these values
+import { getRandomVideo } from 'helpers.js';
 
 mainWindow.on("launchoverlayshow", (ev) => {
     // Get the current game info

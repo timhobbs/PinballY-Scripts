@@ -1,4 +1,4 @@
-import { console, toggleWindows } from "helpers.js";
+import { console, toggleWindows } from 'helpers.js';
 
 const forceCapture = command.allocate("CaptureForce");
 let editState = false;
