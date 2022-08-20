@@ -34,7 +34,5 @@ export const debug = false;
 // https://www.videezy.com/free-video/abstract-loop - check here for videos
 // Uses disableWheel and disableMessaging
 
-
-
 // ------------------------------------------
 // END - Edit these values

@@ -7,7 +7,7 @@ import 'vpcHighScores.js';
 import 'submitScore.js';
 import 'mediaCapture.js';
 
-import { console, toggleWindows } from 'helpers.js';
+import { console } from 'helpers.js';
 
 // import 'randomLoadingAnimation.js';
 // import 'launchLoadingVideo.js';
@@ -19,9 +19,5 @@ if (debug) {
     // const console = logfile;
     mainWindow.on('command', ev => {
         console.log(`***** currentCommand: ${ev.name}`);
-        toggleWindows(false);
-        setTimeout(() => {
-            toggleWindows(true);
-        }, 2000);
     });
 }
