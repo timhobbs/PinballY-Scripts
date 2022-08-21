@@ -8,9 +8,6 @@ mainWindow.on("command", ev => {
         editState = true;
         console.log('***** mediaCapture editState: ' + editState);
         toggleWindows(false);
-        mainWindow.doCommand(command.CaptureMediaSetup);
-        mainWindow.doCommand(command.CaptureLayoutOk);
-        mainWindow.doButtonCommand('Select', true, 0);
     }
 });
 
