@@ -122,6 +122,7 @@ function getGameData(gameInfo) {
     const fso = createAutomationObject("Scripting.FileSystemObject");
     const file = fso.OpenTextFile(gameInfo.dbFile, 1);
     const contents = file.ReadAll();
+    file.Close();
 
     // Parse xml
     const doc = createAutomationObject("MSXML2.DOMDocument");
