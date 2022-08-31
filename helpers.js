@@ -4,6 +4,7 @@ export const toggleWindows = (state) => {
     console.log('***** toggleWindows:', state);
     dmdWindow.showWindow(state);
     topperWindow.showWindow(state);
+    backglassWindow.showWindow(state);
 };
 
 const getRandomInt = (max) => {
