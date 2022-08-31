@@ -83,7 +83,12 @@ mainWindow.on("gamestarted", (ev) => {
     // processes.forEach(p => console.log(`*****: ${p}`));
 
     // Clear the overlay when the game starts
-    mainWindow.launchOverlay.bg.clear(0xff000000);
+    // Until we can get something proper in place (to know the window is open)
+    // we'll just put an artifical delay here
+    const delay = 5000;
+    setTimeout(() => {
+        mainWindow.launchOverlay.bg.clear(0xff000000);
+    }, delay);
 });
 
 mainWindow.on("launchoverlaymessage", (ev) => {
