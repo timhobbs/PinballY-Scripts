@@ -2,9 +2,15 @@ export const console = logfile;
 
 export const toggleWindows = (state) => {
     console.log('***** toggleWindows:', state);
-    dmdWindow.showWindow(state);
-    topperWindow.showWindow(state);
-    backglassWindow.showWindow(state);
+
+    // Wait a few seconds before hiding so that any process looking for windows finds them
+    // If we are toggling the windows back on just do it immediately...
+    const timeout = state ? 0 : 5000;
+    setTimeout(() => {
+        dmdWindow.showWindow(state);
+        topperWindow.showWindow(state);
+        backglassWindow.showWindow(state);
+    }, timeout);
 };
 
 const getRandomInt = (max) => {
