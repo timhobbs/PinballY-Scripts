@@ -6,6 +6,7 @@ import { Shell32, console, toggleWindows } from 'helpers.js';
 // Edit the path to point to your PBY scripts folder
 // Be sure to edit the folder location in `table-edit.bat` as well
 const batchFile = "c:\\Games\\PinballY\\Scripts\\table-edit.bat";
+const batchFile64 = "c:\\Games\\PinballY\\Scripts\\table-edit64.bat";
 
 // // Uncomment the second line if you want to enable logging output
 // let console = { log: () => {} };
@@ -42,10 +43,16 @@ mainWindow.on("command", ev => {
         const filename = '"' + gameInfo.resolveGameFile().filename + '"';
         console.log('***** command: ' + ev.name + ' - ' + filename);
 
+        // Check for 64bit tables
+        let batchToExecute = batchFile;
+        if (gameInfo.path.includes('vpx64')) {
+            batchToExecute = batchFile64;
+        }
+
         // run the command
         // call batch file (hidden mode) and handover the Color as parameter
         let result = Shell32.ShellExecuteW(
-            null, "open", batchFile, filename, null, SW_HIDE
+            null, "open", batchToExecute, filename, null, SW_HIDE
         );
 
         // The result of ShellExecute() is a fake handle value that we
