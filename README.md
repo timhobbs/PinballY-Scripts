@@ -133,3 +133,12 @@ You will want to alter the script to point to the location of your `table-edit.b
 I have included a batch files to process media:
 
 - `to-mp4.bat`: converts `.mov` files to `.mp4`
+
+## Pinup Issues
+
+Some tables would not close pinup player so I took MJR's advice and created the batch file to force it closed. To use it:
+
+- Add to VPX "Run after (1)":
+  ```
+  cmd /c [PINBALLY]\Scripts\close-pinup.bat
+  ```
