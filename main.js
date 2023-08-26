@@ -1,7 +1,7 @@
 import 'launchAnimations.js';
 import 'tableEdit.js';
 import 'forceCapture.js';
-import 'gameEvents.js';
+// import 'gameEvents.js';
 import 'showApronCard.js';
 import 'vpcHighScores.js';
 import 'submitScore.js';
